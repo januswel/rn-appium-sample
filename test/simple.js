@@ -1,5 +1,6 @@
 'use strict'
 
+const assert = require('assert')
 const wd = require('wd')
 const CONFIG = {
   SERVER: {
@@ -18,7 +19,7 @@ const CONFIG = {
 Object.freeze(CONFIG)
 
 describe('appium', function () {
-  this.timeout(300000)
+  this.timeout(200000)
   let driver
   let allArePassed = true
 
@@ -36,8 +37,13 @@ describe('appium', function () {
     allArePassed = allArePassed && this.currentTest.state === 'passed'
   })
 
-  it('simple', function () {
-    // TODO
+  it('simple', function (done) {
+    driver.elementsByXPath('//XCUIElementTypeStatusBar//XCUIElementTypeOther[@label]', function (err, elements) {
+      elements[0].text().then(function (text) {
+        assert(text === 'SSID')
+        done()
+      })
+    })
   })
 })
 
